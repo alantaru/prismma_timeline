@@ -1,3 +1,46 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "event-1",
+      "description": "The Colosseum in Rome, representing the founding and might of the Roman Empire.",
+      "imageUrl": "https://picsum.photos/seed/event1/600/400",
+      "imageHint": "colosseum rome"
+    },
+    {
+      "id": "event-2",
+      "description": "Ruins of the Roman Forum, symbolizing the Fall of the Western Roman Empire.",
+      "imageUrl": "https://picsum.photos/seed/event2/600/400",
+      "imageHint": "roman forum"
+    },
+    {
+      "id": "event-3",
+      "description": "A replica of the Santa Maria, one of Columbus's ships.",
+      "imageUrl": "https://picsum.photos/seed/event3/600/400",
+      "imageHint": "sailing ship"
+    },
+    {
+      "id": "event-4",
+      "description": "A painting depicting a scene from the Renaissance, with artists and scholars.",
+      "imageUrl": "https://picsum.photos/seed/event4/600/400",
+      "imageHint": "renaissance painting"
+    },
+    {
+      "id": "event-5",
+      "description": "A black and white photograph of a trench during World War I.",
+      "imageUrl": "https://picsum.photos/seed/event5/600/400",
+      "imageHint": "trench warfare"
+    },
+    {
+      "id": "event-6",
+      "description": "The Apollo 11 moon landing.",
+      "imageUrl": "https://picsum.photos/seed/event6/600/400",
+      "imageHint": "moon landing"
+    },
+    {
+      "id": "event-7",
+      "description": "A person using an early personal computer, representing the dawn of the Information Age.",
+      "imageUrl": "https://picsum.photos/seed/event7/600/400",
+      "imageHint": "vintage computer"
+    }
+  ]
 }
