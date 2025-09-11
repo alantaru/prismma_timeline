@@ -20,19 +20,22 @@ export function EventItem({ event, minYear, totalYears, onClick }: EventItemProp
         <TooltipTrigger asChild>
           <motion.div
             onClick={onClick}
-            className="absolute top-[calc(50%-0.75rem)] w-6 h-6 rounded-full bg-accent/50 border-2 border-accent cursor-pointer flex items-center justify-center group"
+            className="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-cyan-400/50 border border-cyan-300 cursor-pointer flex items-center justify-center group"
             style={{
               left: `${left}%`,
               transform: 'translateX(-50%)',
+              boxShadow: '0 0 8px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3)',
             }}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            whileHover={{ scale: 1.5, zIndex: 10,
-              boxShadow: '0 0 15px hsl(var(--accent))'
+            whileHover={{ 
+              scale: 1.75, 
+              zIndex: 10,
+              boxShadow: '0 0 15px rgba(0, 255, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.6)',
             }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           >
-             <div className="w-2 h-2 rounded-full bg-accent transition-transform duration-300 group-hover:scale-125"></div>
+             <div className="w-1 h-1 rounded-full bg-cyan-200 transition-transform duration-300 group-hover:scale-125"></div>
           </motion.div>
         </TooltipTrigger>
         <TooltipContent>

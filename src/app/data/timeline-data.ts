@@ -4,7 +4,6 @@ export type Era = {
   startYear: number;
   endYear: number;
   description: string;
-  color: string;
 };
 
 export type Event = {
@@ -24,7 +23,6 @@ export const eras: Era[] = [
     startYear: -753,
     endYear: 476,
     description: 'The era of classical civilizations, such as Ancient Greece and the Roman Empire, which laid the foundations of Western culture.',
-    color: 'bg-red-500/20 border-red-500',
   },
   {
     id: 'era-2',
@@ -32,7 +30,6 @@ export const eras: Era[] = [
     startYear: 476,
     endYear: 1492,
     description: 'Also known as the medieval period, it spanned from the fall of the Western Roman Empire to the beginning of the Renaissance and the Age of Discovery.',
-    color: 'bg-yellow-500/20 border-yellow-500',
   },
   {
     id: 'era-3',
@@ -40,7 +37,6 @@ export const eras: Era[] = [
     startYear: 1400,
     endYear: 1800,
     description: 'Characterized by the Renaissance, the Age of Discovery, and the Protestant Reformation. It was a time of great scientific and artistic achievement.',
-    color: 'bg-green-500/20 border-green-500',
   },
     {
     id: 'era-4',
@@ -48,7 +44,6 @@ export const eras: Era[] = [
     startYear: 1800,
     endYear: 2024,
     description: 'An era of industrialization, global conflicts, technological revolution, and the rise of a globalized world.',
-    color: 'bg-blue-500/20 border-blue-500',
   },
 ];
 

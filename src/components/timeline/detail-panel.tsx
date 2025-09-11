@@ -17,18 +17,18 @@ export function DetailPanel({ item, onOpenChange }: DetailPanelProps) {
 
   return (
     <Sheet open={!!item} onOpenChange={onOpenChange}>
-      <SheetContent className="w-[400px] sm:w-[540px] bg-background/90 backdrop-blur-lg overflow-y-auto">
+      <SheetContent className="w-[400px] sm:w-[540px] bg-background/80 border-cyan-400/20 backdrop-blur-lg overflow-y-auto">
         {item && (
           <>
             <SheetHeader>
               <SheetTitle className="text-primary font-headline text-2xl mb-2">{item.name}</SheetTitle>
-              <SheetDescription className="text-lg">
+              <SheetDescription className="text-lg text-cyan-400/80">
                 {isEra ? `${item.startYear} - ${item.endYear}` : item.year}
               </SheetDescription>
             </SheetHeader>
             <div className="py-4 space-y-4">
               {placeholderImage && (
-                <div className="rounded-lg overflow-hidden border border-border">
+                <div className="rounded-lg overflow-hidden border border-cyan-400/20 shadow-lg shadow-cyan-400/10">
                   <Image
                     src={placeholderImage.imageUrl}
                     alt={placeholderImage.description}
