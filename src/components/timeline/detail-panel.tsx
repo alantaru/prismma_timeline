@@ -17,18 +17,18 @@ export function DetailPanel({ item, onOpenChange }: DetailPanelProps) {
 
   return (
     <Sheet open={!!item} onOpenChange={onOpenChange}>
-      <SheetContent className="w-[400px] sm:w-[540px] bg-background/80 border-cyan-400/20 backdrop-blur-lg overflow-y-auto">
+      <SheetContent className="w-[400px] sm:w-[540px] bg-slate-900/80 border-slate-700 backdrop-blur-lg overflow-y-auto text-slate-50">
         {item && (
           <>
             <SheetHeader>
-              <SheetTitle className="text-primary font-headline text-2xl mb-2">{item.name}</SheetTitle>
-              <SheetDescription className="text-lg text-cyan-400/80">
+              <SheetTitle className="text-primary font-headline text-2xl mb-2 text-slate-200">{item.name}</SheetTitle>
+              <SheetDescription className="text-lg text-slate-400">
                 {isEra ? `${item.startYear} - ${item.endYear}` : item.year}
               </SheetDescription>
             </SheetHeader>
             <div className="py-4 space-y-4">
               {placeholderImage && (
-                <div className="rounded-lg overflow-hidden border border-cyan-400/20 shadow-lg shadow-cyan-400/10">
+                <div className="rounded-lg overflow-hidden border border-slate-700 shadow-lg shadow-slate-950/20">
                   <Image
                     src={placeholderImage.imageUrl}
                     alt={placeholderImage.description}
@@ -39,7 +39,7 @@ export function DetailPanel({ item, onOpenChange }: DetailPanelProps) {
                   />
                 </div>
               )}
-              <p className="text-foreground/80 leading-relaxed">{item.description}</p>
+              <p className="text-slate-300 leading-relaxed">{item.description}</p>
             </div>
           </>
         )}

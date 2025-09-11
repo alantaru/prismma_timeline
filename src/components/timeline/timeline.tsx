@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { Era, Event, TimelineItem } from '@/app/data/timeline-data';
 import { ZoomControls } from './zoom-controls';
 import { DetailPanel } from './detail-panel';
@@ -9,6 +9,7 @@ import { EraItem as EraItemComponent } from './era-item';
 import { EventItem as EventItemComponent } from './event-item';
 import { useToast } from "@/hooks/use-toast";
 import { intelligentZoom, IntelligentZoomInput } from '@/ai/flows/intelligent-zoom';
+import { TimelineRuler } from './timeline-ruler';
 
 type TimelineProps = {
   eras: Era[];
@@ -97,8 +98,10 @@ export function Timeline({ eras, events }: TimelineProps) {
           transition={{ duration: 0.5, ease: 'easeInOut' }}
         >
           {/* Main Timeline Axis */}
-          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-cyan-400/20 z-0" />
+          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-slate-700 z-0" />
           
+          <TimelineRuler minYear={minYear} maxYear={maxYear} zoom={zoom} totalYears={totalYears} />
+
           {/* Eras */}
           <div className="absolute top-0 left-0 w-full h-1/2 p-4">
             {eras.map(era => 
