@@ -75,6 +75,8 @@ export function Timeline({ eras, events }: TimelineProps) {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeftStart = useRef(0);
+  const startY = useRef(0);
+  const scrollTopStart = useRef(0);
 
 
   const { minYear, maxYear, totalYears } = useMemo(() => {
@@ -111,6 +113,8 @@ export function Timeline({ eras, events }: TimelineProps) {
     isDragging.current = true;
     startX.current = e.pageX - scrollContainerRef.current.offsetLeft;
     scrollLeftStart.current = scrollContainerRef.current.scrollLeft;
+    startY.current = e.pageY - scrollContainerRef.current.offsetTop;
+    scrollTopStart.current = scrollContainerRef.current.scrollTop;
     scrollContainerRef.current.style.cursor = 'grabbing';
   };
 
@@ -132,8 +136,12 @@ export function Timeline({ eras, events }: TimelineProps) {
     if (!isDragging.current || !scrollContainerRef.current) return;
     e.preventDefault();
     const x = e.pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startX.current) * 2; // The multiplier allows for faster scrolling
-    scrollContainerRef.current.scrollLeft = scrollLeftStart.current - walk;
+    const walkX = (x - startX.current) * 2; 
+    scrollContainerRef.current.scrollLeft = scrollLeftStart.current - walkX;
+
+    const y = e.pageY - scrollContainerRef.current.offsetTop;
+    const walkY = (y - startY.current) * 2;
+    scrollContainerRef.current.scrollTop = scrollTopStart.current - walkY;
   };
 
   const handleIntelligentZoom = useCallback(async () => {
@@ -183,7 +191,7 @@ export function Timeline({ eras, events }: TimelineProps) {
     <div className="w-full h-full flex flex-col">
       <div 
         ref={measuredRef} 
-        className="flex-grow w-full overflow-x-auto relative cursor-grab active:cursor-grabbing"
+        className="flex-grow w-full overflow-auto relative cursor-grab active:cursor-grabbing"
         onMouseDown={handleMouseDown}
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
