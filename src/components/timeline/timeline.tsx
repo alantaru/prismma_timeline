@@ -28,7 +28,7 @@ function getVerticalLevels<T extends { startYear: number; endYear: number } | { 
 
   const sortedItems = [...items].sort((a, b) => {
     const yearA = 'year' in a ? a.year : a.startYear;
-    const yearB = 'year' in b ? b.year : b.startYear;
+    const yearB = 'year' in b ? b.year : b.endYear;
     return yearA - yearB;
   });
 
@@ -36,9 +36,9 @@ function getVerticalLevels<T extends { startYear: number; endYear: number } | { 
 
   for (const item of sortedItems) {
     const id = 'id' in item ? (item as any).id : String(Math.random());
-    const startPixel = 'year' in item 
+    const startPixel = ('year' in item 
       ? item.year * pixelsPerYear 
-      : item.startYear * pixelsPerYear;
+      : item.startYear * pixelsPerYear) - (minYear * pixelsPerYear);
     
     const itemWidth = 'year' in item
       ? ITEM_WIDTH 
@@ -72,6 +72,10 @@ export function Timeline({ eras, events }: TimelineProps) {
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
 
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeftStart = useRef(0);
+
 
   const { minYear, maxYear, totalYears } = useMemo(() => {
     const allYears = [
@@ -100,6 +104,36 @@ export function Timeline({ eras, events }: TimelineProps) {
 
   const handleClosePanel = () => {
     setSelectedItem(null);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!scrollContainerRef.current) return;
+    isDragging.current = true;
+    startX.current = e.pageX - scrollContainerRef.current.offsetLeft;
+    scrollLeftStart.current = scrollContainerRef.current.scrollLeft;
+    scrollContainerRef.current.style.cursor = 'grabbing';
+  };
+
+  const handleMouseLeave = () => {
+    isDragging.current = false;
+    if(scrollContainerRef.current) {
+        scrollContainerRef.current.style.cursor = 'grab';
+    }
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
+    if(scrollContainerRef.current) {
+        scrollContainerRef.current.style.cursor = 'grab';
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging.current || !scrollContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX.current) * 2; // The multiplier allows for faster scrolling
+    scrollContainerRef.current.scrollLeft = scrollLeftStart.current - walk;
   };
 
   const handleIntelligentZoom = useCallback(async () => {
@@ -150,6 +184,10 @@ export function Timeline({ eras, events }: TimelineProps) {
       <div 
         ref={measuredRef} 
         className="flex-grow w-full overflow-x-auto relative cursor-grab active:cursor-grabbing"
+        onMouseDown={handleMouseDown}
+        onMouseLeave={handleMouseLeave}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
       >
         <motion.div 
           className="relative h-full"
