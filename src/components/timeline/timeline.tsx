@@ -19,7 +19,7 @@ type TimelineProps = {
 const ITEM_WIDTH = 192; // 12rem
 const ITEM_GAP = 16; // 1rem
 
-function getVerticalLevels<T extends { startYear: number; endYear: number } | { year: number }>(items: T[], totalYears: number, zoom: number, containerWidth: number | null): Map<string, number> {
+function getVerticalLevels<T extends { startYear: number; endYear: number } | { year: number }>(items: T[], minYear: number, totalYears: number, zoom: number, containerWidth: number | null): Map<string, number> {
   const levels = new Map<string, number>();
   if (!containerWidth) return levels;
 
@@ -95,8 +95,8 @@ export function Timeline({ eras, events }: TimelineProps) {
     }
   }, []);
   
-  const eraLevels = useMemo(() => getVerticalLevels(eras, totalYears, zoom, containerWidth), [eras, totalYears, zoom, containerWidth]);
-  const eventLevels = useMemo(() => getVerticalLevels(events, totalYears, zoom, containerWidth), [events, totalYears, zoom, containerWidth]);
+  const eraLevels = useMemo(() => getVerticalLevels(eras, minYear, totalYears, zoom, containerWidth), [eras, minYear, totalYears, zoom, containerWidth]);
+  const eventLevels = useMemo(() => getVerticalLevels(events, minYear, totalYears, zoom, containerWidth), [events, minYear, totalYears, zoom, containerWidth]);
 
   const handleSelectItem = (item: TimelineItem) => {
     setSelectedItem(item);
