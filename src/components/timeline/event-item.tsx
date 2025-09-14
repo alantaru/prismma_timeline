@@ -24,7 +24,6 @@ export function EventItem({ event, minYear, totalYears, onClick, level }: EventI
       style={{ 
         left: `${left}%`,
         top: 0,
-        transform: 'translateX(-50%)',
       }}
     >
       {/* Connector Line */}
@@ -32,7 +31,7 @@ export function EventItem({ event, minYear, totalYears, onClick, level }: EventI
         className="absolute w-px bg-primary"
         style={{ 
           top: 0,
-          left: '50%',
+          left: '0', // Start at the exact point
           height: `${top}rem`,
         }}
       />
