@@ -24,24 +24,25 @@ export function EventItem({ event, minYear, totalYears, onClick, level }: EventI
       style={{ 
         left: `${left}%`,
         top: 0,
+        // The container itself should not be transformed
       }}
     >
-      {/* Connector Line */}
+      {/* Connector Line: Positioned absolutely relative to the container. It starts at the top and goes down to the card's top position. */}
       <div 
         className="absolute w-px bg-primary"
         style={{ 
           top: 0,
-          left: '0', // Start at the exact point
+          left: '0', // The line itself is at the exact point of the year.
           height: `${top}rem`,
         }}
       />
 
-      {/* Event Card */}
+      {/* Event Card: Positioned absolutely relative to the container and then shifted left by 50% of its own width to be centered. */}
       <motion.div
         onClick={onClick}
         className="absolute w-40 bg-card text-card-foreground rounded-md shadow-lg p-2 cursor-pointer border border-border"
         style={{
-            transform: 'translateX(-50%)',
+            transform: 'translateX(-50%)', // Center the card on the line
             top: `${top}rem`,
         }}
         initial={{ opacity: 0, y: -20 }}
