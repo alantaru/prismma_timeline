@@ -29,8 +29,12 @@ export function EventItem({ event, minYear, totalYears, onClick, level }: EventI
     >
       {/* Connector Line */}
       <div 
-        className="absolute left-1/2 w-px bg-primary"
-        style={{ height: `${top}rem`, top: `-${topOffset}rem` }}
+        className="absolute w-px bg-primary"
+        style={{ 
+          top: 0,
+          left: '50%',
+          height: `${top}rem`,
+        }}
       />
 
       {/* Event Card */}
