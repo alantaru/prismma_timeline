@@ -96,5 +96,26 @@ export const events: Event[] = [
     year: 1975,
     description: 'The beginning of the mass-market personal computer era, leading to the digital revolution and the internet.',
     imageId: 'event-7'
+  },
+  {
+    id: 'event-8',
+    name: 'Invention of the Printing Press',
+    year: 1440,
+    description: 'Johannes Gutenberg\'s invention of movable-type printing in Europe, which revolutionized communication and knowledge dissemination.',
+    imageId: 'event-8'
+  },
+  {
+    id: 'event-9',
+    name: 'Fall of Constantinople',
+    year: 1453,
+    description: 'The capture of the Byzantine capital by the Ottoman Empire, an event that marked the end of the Roman Empire and the Middle Ages.',
+    imageId: 'event-9'
+  },
+  {
+    id: 'event-10',
+    name: 'Industrial Revolution Begins',
+    year: 1760,
+    description: 'A period of major industrialization that took place during the late 1700s and early 1800s, beginning in Great Britain.',
+    imageId: 'event-10'
   }
 ];

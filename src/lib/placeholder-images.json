@@ -41,6 +41,24 @@
       "description": "A person using an early personal computer, representing the dawn of the Information Age.",
       "imageUrl": "https://picsum.photos/seed/event7/600/400",
       "imageHint": "vintage computer"
+    },
+    {
+      "id": "event-8",
+      "description": "An old printing press machine, symbolizing the revolution in communication.",
+      "imageUrl": "https://picsum.photos/seed/event8/600/400",
+      "imageHint": "printing press"
+    },
+    {
+      "id": "event-9",
+      "description": "A depiction of the battle during the Fall of Constantinople.",
+      "imageUrl": "https://picsum.photos/seed/event9/600/400",
+      "imageHint": "constantinople battle"
+    },
+    {
+      "id": "event-10",
+      "description": "A factory from the Industrial Revolution era, with smoke stacks.",
+      "imageUrl": "https://picsum.photos/seed/event10/600/400",
+      "imageHint": "industrial factory"
     }
   ]
 }
