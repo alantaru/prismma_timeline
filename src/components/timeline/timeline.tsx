@@ -16,6 +16,8 @@ type TimelineProps = {
   events: Event[];
 };
 
+const MIN_ZOOM = 0.01;
+const MAX_ZOOM = 500;
 const ITEM_WIDTH = 160; // 10rem
 const ITEM_GAP = 16; // 1rem
 const LEVEL_HEIGHT = 80; // pixels
@@ -155,6 +157,20 @@ export function Timeline({ eras, events }: TimelineProps) {
     scrollContainerRef.current.scrollTop = scrollTopStart.current - walkY;
   };
 
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const zoomFactor = 1.1;
+    let newZoom;
+    if (e.deltaY < 0) {
+      // Zoom in
+      newZoom = Math.min(MAX_ZOOM, zoom * zoomFactor);
+    } else {
+      // Zoom out
+      newZoom = Math.max(MIN_ZOOM, zoom / zoomFactor);
+    }
+    setZoom(newZoom);
+  };
+  
   const handleIntelligentZoom = useCallback(async () => {
     if (!scrollContainerRef.current) return;
     setIsAiLoading(true);
@@ -207,6 +223,7 @@ export function Timeline({ eras, events }: TimelineProps) {
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
+        onWheel={handleWheel}
       >
         <motion.div 
           className="relative"
