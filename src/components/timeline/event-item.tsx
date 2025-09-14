@@ -15,7 +15,7 @@ const LEVEL_HEIGHT = 100;
 
 export function EventItem({ event, minYear, totalYears, onClick, level }: EventItemProps) {
   const left = ((event.year - minYear) / totalYears) * 100;
-  const topOffset = 4; // in rem, space from the ruler
+  const topOffset = 2.5; // in rem, space from the ruler
   const top = topOffset + level * (LEVEL_HEIGHT / 16); // in rem
 
   return (
@@ -29,8 +29,8 @@ export function EventItem({ event, minYear, totalYears, onClick, level }: EventI
     >
       {/* Connector Line */}
       <div 
-        className="absolute bottom-full left-1/2 w-px bg-primary"
-        style={{ height: `${top}rem`, top: `-${topOffset}rem`, bottom: 'auto' }}
+        className="absolute left-1/2 w-px bg-primary"
+        style={{ height: `${top}rem`, top: `-${topOffset}rem` }}
       />
 
       {/* Event Card */}

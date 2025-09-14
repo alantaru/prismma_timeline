@@ -19,6 +19,7 @@ type TimelineProps = {
 const ITEM_WIDTH = 192; // 12rem
 const ITEM_GAP = 16; // 1rem
 const LEVEL_HEIGHT = 100; // pixels
+const ERA_LEVEL_HEIGHT = 40; // pixels, more compact for eras
 
 function getVerticalLevels<T extends { startYear: number; endYear: number } | { year: number }>(items: T[], minYear: number, totalYears: number, zoom: number, containerWidth: number | null): Map<string, number> {
   const levels = new Map<string, number>();
@@ -29,7 +30,7 @@ function getVerticalLevels<T extends { startYear: number; endYear: number } | { 
 
   const sortedItems = [...items].sort((a, b) => {
     const yearA = 'year' in a ? a.year : a.startYear;
-    const yearB = 'year' in b ? b.year : b.endYear;
+    const yearB = 'year' in b ? b.year : b.startYear; // Always use startYear for eras for sorting
     return yearA - yearB;
   });
 
@@ -38,12 +39,12 @@ function getVerticalLevels<T extends { startYear: number; endYear: number } | { 
   for (const item of sortedItems) {
     const id = 'id' in item ? (item as any).id : String(Math.random());
     const startPixel = ('year' in item 
-      ? item.year * pixelsPerYear 
-      : item.startYear * pixelsPerYear) - (minYear * pixelsPerYear);
+      ? (item.year - minYear) * pixelsPerYear 
+      : (item.startYear - minYear) * pixelsPerYear);
     
     const itemWidth = 'year' in item
       ? ITEM_WIDTH 
-      : (item.endYear - item.startYear) * pixelsPerYear;
+      : ((item.endYear - item.startYear) * pixelsPerYear);
 
     let placed = false;
     for (let i = 0; i < levelEndPositions.length; i++) {
@@ -104,10 +105,10 @@ export function Timeline({ eras, events }: TimelineProps) {
   const maxEraLevel = useMemo(() => Math.max(0, ...Array.from(eraLevels.values())), [eraLevels]);
   const maxEventLevel = useMemo(() => Math.max(0, ...Array.from(eventLevels.values())), [eventLevels]);
 
-  const topContentHeight = (maxEraLevel + 1) * LEVEL_HEIGHT;
-  const bottomContentHeight = (maxEventLevel + 1) * LEVEL_HEIGHT;
-  const timelineRulerY = topContentHeight + 50; // Position ruler below eras
-  const totalContentHeight = timelineRulerY + bottomContentHeight + 50; // +50 for spacing
+  const topContentHeight = (maxEraLevel + 1) * ERA_LEVEL_HEIGHT + 50; // +50 for spacing
+  const bottomContentHeight = (maxEventLevel + 1) * LEVEL_HEIGHT + 100; // +100 for spacing
+  const timelineRulerY = topContentHeight;
+  const totalContentHeight = topContentHeight + bottomContentHeight;
 
 
   const handleSelectItem = (item: TimelineItem) => {
@@ -213,7 +214,8 @@ export function Timeline({ eras, events }: TimelineProps) {
           animate={{ width: `${zoom * 100}%` }}
           transition={{ duration: 0.5, ease: 'easeInOut' }}
         >
-          <div className="absolute top-0 left-0 w-full" style={{ height: `${topContentHeight}px` }}>
+          {/* Eras Container */}
+          <div className="absolute top-0 left-0 w-full" style={{ height: `${topContentHeight}px`, top: `${timelineRulerY - topContentHeight}px` }}>
             {eras.map(era => 
               <EraItemComponent 
                 key={era.id} 
@@ -226,10 +228,12 @@ export function Timeline({ eras, events }: TimelineProps) {
             )}
           </div>
           
+          {/* Ruler Container */}
           <div style={{ position: 'absolute', top: `${timelineRulerY}px`, width: '100%', height: '1px' }}>
             <TimelineRuler minYear={minYear} maxYear={maxYear} zoom={zoom} totalYears={totalYears} />
           </div>
 
+          {/* Events Container */}
           <div className="absolute left-0 w-full" style={{ top: `${timelineRulerY}px`, height: `${bottomContentHeight}px`}}>
             {events.map(event => 
               <EventItemComponent
