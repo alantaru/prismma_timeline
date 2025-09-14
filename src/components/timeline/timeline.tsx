@@ -18,6 +18,7 @@ type TimelineProps = {
 
 const ITEM_WIDTH = 192; // 12rem
 const ITEM_GAP = 16; // 1rem
+const LEVEL_HEIGHT = 100; // pixels
 
 function getVerticalLevels<T extends { startYear: number; endYear: number } | { year: number }>(items: T[], minYear: number, totalYears: number, zoom: number, containerWidth: number | null): Map<string, number> {
   const levels = new Map<string, number>();
@@ -99,6 +100,14 @@ export function Timeline({ eras, events }: TimelineProps) {
   
   const eraLevels = useMemo(() => getVerticalLevels(eras, minYear, totalYears, zoom, containerWidth), [eras, minYear, totalYears, zoom, containerWidth]);
   const eventLevels = useMemo(() => getVerticalLevels(events, minYear, totalYears, zoom, containerWidth), [events, minYear, totalYears, zoom, containerWidth]);
+  
+  const maxEraLevel = useMemo(() => Math.max(0, ...Array.from(eraLevels.values())), [eraLevels]);
+  const maxEventLevel = useMemo(() => Math.max(0, ...Array.from(eventLevels.values())), [eventLevels]);
+
+  const topContentHeight = (maxEraLevel + 1) * LEVEL_HEIGHT;
+  const bottomContentHeight = (maxEventLevel + 1) * LEVEL_HEIGHT;
+  const totalContentHeight = topContentHeight + bottomContentHeight + 100; // +100 for ruler and spacing
+
 
   const handleSelectItem = (item: TimelineItem) => {
     setSelectedItem(item);
@@ -198,8 +207,8 @@ export function Timeline({ eras, events }: TimelineProps) {
         onMouseMove={handleMouseMove}
       >
         <motion.div 
-          className="relative h-full"
-          style={{ width: `${zoom * 100}%` }}
+          className="relative"
+          style={{ width: `${zoom * 100}%`, height: `${totalContentHeight}px` }}
           animate={{ width: `${zoom * 100}%` }}
           transition={{ duration: 0.5, ease: 'easeInOut' }}
         >
@@ -207,7 +216,7 @@ export function Timeline({ eras, events }: TimelineProps) {
           <TimelineRuler minYear={minYear} maxYear={maxYear} zoom={zoom} totalYears={totalYears} />
 
           {/* Eras */}
-          <div className="absolute top-0 left-0 w-full h-1/2 -translate-y-full -top-8">
+          <div className="absolute top-0 left-0 w-full" style={{ height: `${topContentHeight}px`}}>
             {eras.map(era => 
               <EraItemComponent 
                 key={era.id} 
@@ -221,7 +230,7 @@ export function Timeline({ eras, events }: TimelineProps) {
           </div>
           
           {/* Events */}
-          <div className="absolute top-1/2 left-0 w-full h-auto">
+          <div className="absolute left-0 w-full" style={{ top: `${topContentHeight}px`, height: `${bottomContentHeight}px`}}>
             {events.map(event => 
               <EventItemComponent
                 key={event.id}

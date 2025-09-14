@@ -41,7 +41,7 @@ export function TimelineRuler({ minYear, maxYear, totalYears, zoom }: TimelineRu
   }, [minYear, maxYear, totalYears, zoom]);
 
   return (
-    <div className="absolute top-1/2 left-0 w-full h-px z-0">
+    <div className="absolute top-1/2 left-0 w-full h-px z-0 -translate-y-1/2">
       {/* Main timeline axis */}
       <div className="absolute top-0 left-0 w-full h-0.5 bg-primary" />
 

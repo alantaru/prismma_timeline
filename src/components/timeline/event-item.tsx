@@ -11,7 +11,6 @@ type EventItemProps = {
   level: number;
 };
 
-const CARD_HEIGHT = 80;
 const LEVEL_HEIGHT = 100; 
 
 export function EventItem({ event, minYear, totalYears, onClick, level }: EventItemProps) {
@@ -23,25 +22,25 @@ export function EventItem({ event, minYear, totalYears, onClick, level }: EventI
       className="absolute"
       style={{ 
         left: `${left}%`,
-        top: '50%',
+        top: 0,
         transform: 'translateX(-50%)',
       }}
     >
       {/* Connector Line */}
       <div 
         className="absolute bottom-full left-1/2 w-px bg-primary"
-        style={{ height: `${top}rem`}}
+        style={{ height: `${top}rem`, top: 0, bottom: 'auto' }}
       />
 
       {/* Event Card */}
       <motion.div
         onClick={onClick}
-        className="absolute bottom-full mb-2 w-48 bg-card text-card-foreground rounded-md shadow-lg p-3 cursor-pointer border border-border"
+        className="absolute w-48 bg-card text-card-foreground rounded-md shadow-lg p-3 cursor-pointer border border-border"
         style={{
             transform: 'translateX(-50%)',
-            bottom: `${top}rem`,
+            top: `${top}rem`,
         }}
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ 
           scale: 1.05, 
