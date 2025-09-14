@@ -16,9 +16,9 @@ type TimelineProps = {
   events: Event[];
 };
 
-const ITEM_WIDTH = 192; // 12rem
+const ITEM_WIDTH = 160; // 10rem
 const ITEM_GAP = 16; // 1rem
-const LEVEL_HEIGHT = 100; // pixels
+const LEVEL_HEIGHT = 80; // pixels
 const ERA_LEVEL_HEIGHT = 40; // pixels, more compact for eras
 
 function getVerticalLevels<T extends { startYear: number; endYear: number } | { year: number }>(items: T[], minYear: number, totalYears: number, zoom: number, containerWidth: number | null): Map<string, number> {

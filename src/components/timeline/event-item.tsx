@@ -11,7 +11,7 @@ type EventItemProps = {
   level: number;
 };
 
-const LEVEL_HEIGHT = 100; 
+const LEVEL_HEIGHT = 80; 
 
 export function EventItem({ event, minYear, totalYears, onClick, level }: EventItemProps) {
   const left = ((event.year - minYear) / totalYears) * 100;
@@ -40,7 +40,7 @@ export function EventItem({ event, minYear, totalYears, onClick, level }: EventI
       {/* Event Card */}
       <motion.div
         onClick={onClick}
-        className="absolute w-48 bg-card text-card-foreground rounded-md shadow-lg p-3 cursor-pointer border border-border"
+        className="absolute w-40 bg-card text-card-foreground rounded-md shadow-lg p-2 cursor-pointer border border-border"
         style={{
             transform: 'translateX(-50%)',
             top: `${top}rem`,
@@ -55,7 +55,7 @@ export function EventItem({ event, minYear, totalYears, onClick, level }: EventI
         }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       >
-        <p className="font-bold text-sm truncate">{event.name}</p>
+        <p className="font-bold text-xs truncate">{event.name}</p>
         <p className="text-xs text-muted-foreground">{event.year < 0 ? `${Math.abs(event.year)} BE` : `${event.year} AE`}</p>
       </motion.div>
     </div>
