@@ -13,7 +13,7 @@ type ZoomControlsProps = {
 };
 
 const MIN_ZOOM = 1;
-const MAX_ZOOM = 100;
+const MAX_ZOOM = 500;
 
 export function ZoomControls({ zoom, setZoom, onIntelligentZoom, isAiLoading }: ZoomControlsProps) {
   
