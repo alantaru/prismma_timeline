@@ -11,28 +11,27 @@ type EventItemProps = {
   level: number;
 };
 
-const LEVEL_HEIGHT = 80; 
+const LEVEL_HEIGHT = 80;
+const TOP_OFFSET_REM = 2.5; // in rem, space from the ruler
 
 export function EventItem({ event, minYear, totalYears, onClick, level }: EventItemProps) {
   const left = ((event.year - minYear) / totalYears) * 100;
-  const topOffset = 2.5; // in rem, space from the ruler
-  const top = topOffset + level * (LEVEL_HEIGHT / 16); // in rem
+  const topRem = TOP_OFFSET_REM + level * (LEVEL_HEIGHT / 16);
 
   return (
     <div
-      className="absolute"
-      style={{ 
+      className="absolute h-full"
+      style={{
         left: `${left}%`,
         top: 0,
-        height: '100%',
       }}
     >
       {/* Connector Line: Positioned absolutely within the container, centered horizontally. */}
-      <div 
-        className="absolute left-1/2 -translate-x-1/2 w-px bg-primary"
-        style={{ 
+      <div
+        className="absolute left-1/2 w-px -translate-x-1/2 bg-primary"
+        style={{
           top: 0,
-          height: `${top}rem`,
+          height: `${topRem}rem`,
         }}
       />
 
@@ -41,16 +40,16 @@ export function EventItem({ event, minYear, totalYears, onClick, level }: EventI
         onClick={onClick}
         className="absolute left-1/2 w-40 bg-card text-card-foreground rounded-md shadow-lg p-2 cursor-pointer border border-border"
         style={{
-            transform: 'translateX(-50%)', // Center the card on the line
-            top: `${top}rem`,
+          transform: 'translateX(-50%)', // Center the card on the line
+          top: `${topRem}rem`,
         }}
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        whileHover={{ 
-          scale: 1.05, 
+        whileHover={{
+          scale: 1.05,
           zIndex: 10,
           boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
-          borderColor: 'hsl(var(--primary))'
+          borderColor: 'hsl(var(--primary))',
         }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       >
