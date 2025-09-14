@@ -2,46 +2,58 @@
 
 import { Event } from '@/app/data/timeline-data';
 import { motion } from 'framer-motion';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 type EventItemProps = {
   event: Event;
   minYear: number;
   totalYears: number;
   onClick: () => void;
+  level: number;
 };
 
-export function EventItem({ event, minYear, totalYears, onClick }: EventItemProps) {
+const CARD_HEIGHT = 80;
+const LEVEL_HEIGHT = 100; 
+
+export function EventItem({ event, minYear, totalYears, onClick, level }: EventItemProps) {
   const left = ((event.year - minYear) / totalYears) * 100;
+  const top = 2 + level * (LEVEL_HEIGHT / 16); // in rem
 
   return (
-    <TooltipProvider delayDuration={100}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <motion.div
-            onClick={onClick}
-            className="absolute top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-slate-500 border-2 border-slate-300 cursor-pointer flex items-center justify-center group"
-            style={{
-              left: `${left}%`,
-              transform: 'translateX(-50%)',
-            }}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            whileHover={{ 
-              scale: 1.75, 
-              zIndex: 10,
-              borderColor: '#f8fafc',
-              backgroundColor: '#cbd5e1'
-            }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          >
-             <div className="w-1 h-1 rounded-full bg-slate-200 transition-transform duration-300 group-hover:scale-125"></div>
-          </motion.div>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p className="font-headline">{event.name} ({event.year})</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <div
+      className="absolute"
+      style={{ 
+        left: `${left}%`,
+        top: '50%',
+        transform: 'translateX(-50%)',
+      }}
+    >
+      {/* Connector Line */}
+      <div 
+        className="absolute bottom-full left-1/2 w-px bg-primary"
+        style={{ height: `${top}rem`}}
+      />
+
+      {/* Event Card */}
+      <motion.div
+        onClick={onClick}
+        className="absolute bottom-full mb-2 w-48 bg-card text-card-foreground rounded-md shadow-lg p-3 cursor-pointer border border-border"
+        style={{
+            transform: 'translateX(-50%)',
+            bottom: `${top}rem`,
+        }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileHover={{ 
+          scale: 1.05, 
+          zIndex: 10,
+          boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
+          borderColor: 'hsl(var(--primary))'
+        }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      >
+        <p className="font-bold text-sm truncate">{event.name}</p>
+        <p className="text-xs text-muted-foreground">{event.year < 0 ? `${Math.abs(event.year)} BE` : `${event.year} AE`}</p>
+      </motion.div>
+    </div>
   );
 }

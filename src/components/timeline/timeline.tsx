@@ -16,12 +16,62 @@ type TimelineProps = {
   events: Event[];
 };
 
+const ITEM_WIDTH = 192; // 12rem
+const ITEM_GAP = 16; // 1rem
+
+function getVerticalLevels<T extends { startYear: number; endYear: number } | { year: number }>(items: T[], totalYears: number, zoom: number, containerWidth: number | null): Map<string, number> {
+  const levels = new Map<string, number>();
+  if (!containerWidth) return levels;
+
+  const timelineWidth = containerWidth * zoom;
+  const pixelsPerYear = timelineWidth / totalYears;
+
+  const sortedItems = [...items].sort((a, b) => {
+    const yearA = 'year' in a ? a.year : a.startYear;
+    const yearB = 'year' in b ? b.year : b.startYear;
+    return yearA - yearB;
+  });
+
+  const levelEndPositions: number[] = [];
+
+  for (const item of sortedItems) {
+    const id = 'id' in item ? (item as any).id : String(Math.random());
+    const startPixel = 'year' in item 
+      ? item.year * pixelsPerYear 
+      : item.startYear * pixelsPerYear;
+    
+    const itemWidth = 'year' in item
+      ? ITEM_WIDTH 
+      : (item.endYear - item.startYear) * pixelsPerYear;
+
+    let placed = false;
+    for (let i = 0; i < levelEndPositions.length; i++) {
+      if (levelEndPositions[i] + ITEM_GAP < startPixel) {
+        levels.set(id, i);
+        levelEndPositions[i] = startPixel + itemWidth;
+        placed = true;
+        break;
+      }
+    }
+
+    if (!placed) {
+      levels.set(id, levelEndPositions.length);
+      levelEndPositions.push(startPixel + itemWidth);
+    }
+  }
+
+  return levels;
+}
+
+
 export function Timeline({ eras, events }: TimelineProps) {
   const [zoom, setZoom] = useState(1);
   const [selectedItem, setSelectedItem] = useState<TimelineItem | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [containerWidth, setContainerWidth] = useState<number | null>(null);
+
 
   const { minYear, maxYear, totalYears } = useMemo(() => {
     const allYears = [
@@ -33,6 +83,16 @@ export function Timeline({ eras, events }: TimelineProps) {
     const max = Math.max(...allYears);
     return { minYear: min, maxYear: max, totalYears: max - min };
   }, [eras, events]);
+
+  const measuredRef = useCallback((node: HTMLDivElement) => {
+    if (node !== null) {
+      setContainerWidth(node.getBoundingClientRect().width);
+      scrollContainerRef.current = node;
+    }
+  }, []);
+  
+  const eraLevels = useMemo(() => getVerticalLevels(eras, totalYears, zoom, containerWidth), [eras, totalYears, zoom, containerWidth]);
+  const eventLevels = useMemo(() => getVerticalLevels(events, totalYears, zoom, containerWidth), [events, totalYears, zoom, containerWidth]);
 
   const handleSelectItem = (item: TimelineItem) => {
     setSelectedItem(item);
@@ -86,9 +146,9 @@ export function Timeline({ eras, events }: TimelineProps) {
   
 
   return (
-    <div className="w-full h-full flex flex-col bg-background">
+    <div className="w-full h-full flex flex-col">
       <div 
-        ref={scrollContainerRef} 
+        ref={measuredRef} 
         className="flex-grow w-full overflow-x-auto relative cursor-grab active:cursor-grabbing"
       >
         <motion.div 
@@ -97,13 +157,11 @@ export function Timeline({ eras, events }: TimelineProps) {
           animate={{ width: `${zoom * 100}%` }}
           transition={{ duration: 0.5, ease: 'easeInOut' }}
         >
-          {/* Main Timeline Axis */}
-          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-slate-700 z-0" />
           
           <TimelineRuler minYear={minYear} maxYear={maxYear} zoom={zoom} totalYears={totalYears} />
 
           {/* Eras */}
-          <div className="absolute top-0 left-0 w-full h-1/2 p-4">
+          <div className="absolute top-0 left-0 w-full h-1/2 -translate-y-full -top-8">
             {eras.map(era => 
               <EraItemComponent 
                 key={era.id} 
@@ -111,12 +169,13 @@ export function Timeline({ eras, events }: TimelineProps) {
                 minYear={minYear} 
                 totalYears={totalYears} 
                 onClick={() => handleSelectItem(era)} 
+                level={eraLevels.get(era.id) || 0}
               />
             )}
           </div>
           
           {/* Events */}
-          <div className="absolute bottom-0 left-0 w-full h-1/2 p-4">
+          <div className="absolute top-1/2 left-0 w-full h-auto">
             {events.map(event => 
               <EventItemComponent
                 key={event.id}
@@ -124,6 +183,7 @@ export function Timeline({ eras, events }: TimelineProps) {
                 minYear={minYear}
                 totalYears={totalYears}
                 onClick={() => handleSelectItem(event)}
+                level={eventLevels.get(event.id) || 0}
               />
             )}
           </div>

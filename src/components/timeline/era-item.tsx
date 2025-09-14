@@ -10,9 +10,10 @@ type EraItemProps = {
   minYear: number;
   totalYears: number;
   onClick: () => void;
+  level: number;
 };
 
-export function EraItem({ era, minYear, totalYears, onClick }: EraItemProps) {
+export function EraItem({ era, minYear, totalYears, onClick, level }: EraItemProps) {
   const left = ((era.startYear - minYear) / totalYears) * 100;
   const width = ((era.endYear - era.startYear) / totalYears) * 100;
 
@@ -23,19 +24,20 @@ export function EraItem({ era, minYear, totalYears, onClick }: EraItemProps) {
           <motion.div
             onClick={onClick}
             className={cn(
-              'absolute bottom-[calc(50%+1rem)] h-8 rounded-sm border text-xs flex items-center justify-center px-2 cursor-pointer transition-all duration-300',
-              'bg-slate-800/80 border-slate-600/80 text-slate-300 hover:bg-slate-700/90 hover:border-slate-500'
+              'absolute h-8 rounded-md border text-sm flex items-center justify-start px-4 cursor-pointer transition-all duration-300',
+              'bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground'
             )}
             style={{
               left: `${left}%`,
               width: `${width}%`,
+              top: `${2 + level * 2.5}rem`,
               minWidth: 'max-content',
             }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            whileHover={{ y: -2, scale: 1.02,
-                boxShadow: '0 0 15px rgba(100, 116, 139, 0.4)'
+            whileHover={{ y: -2,
+                boxShadow: '0 0 15px rgba(203, 213, 225, 0.1)'
              }}
           >
             <span className="truncate font-headline">{era.name}</span>
