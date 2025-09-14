@@ -30,7 +30,7 @@ export function EraItem({ era, minYear, totalYears, onClick, level }: EraItemPro
             style={{
               left: `${left}%`,
               width: `${width}%`,
-              bottom: `${2 + level * 2.5}rem`,
+              top: `${2 + level * 2.5}rem`,
               minWidth: 'max-content',
             }}
             initial={{ opacity: 0 }}

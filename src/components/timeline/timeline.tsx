@@ -106,7 +106,8 @@ export function Timeline({ eras, events }: TimelineProps) {
 
   const topContentHeight = (maxEraLevel + 1) * LEVEL_HEIGHT;
   const bottomContentHeight = (maxEventLevel + 1) * LEVEL_HEIGHT;
-  const totalContentHeight = topContentHeight + bottomContentHeight + 100; // +100 for ruler and spacing
+  const timelineRulerY = topContentHeight + 50; // Position ruler below eras
+  const totalContentHeight = timelineRulerY + bottomContentHeight + 50; // +50 for spacing
 
 
   const handleSelectItem = (item: TimelineItem) => {
@@ -212,11 +213,7 @@ export function Timeline({ eras, events }: TimelineProps) {
           animate={{ width: `${zoom * 100}%` }}
           transition={{ duration: 0.5, ease: 'easeInOut' }}
         >
-          
-          <TimelineRuler minYear={minYear} maxYear={maxYear} zoom={zoom} totalYears={totalYears} />
-
-          {/* Eras */}
-          <div className="absolute top-0 left-0 w-full" style={{ height: `${topContentHeight}px`}}>
+          <div className="absolute top-0 left-0 w-full" style={{ height: `${topContentHeight}px` }}>
             {eras.map(era => 
               <EraItemComponent 
                 key={era.id} 
@@ -229,8 +226,11 @@ export function Timeline({ eras, events }: TimelineProps) {
             )}
           </div>
           
-          {/* Events */}
-          <div className="absolute left-0 w-full" style={{ top: `${topContentHeight}px`, height: `${bottomContentHeight}px`}}>
+          <div style={{ position: 'absolute', top: `${timelineRulerY}px`, width: '100%', height: '1px' }}>
+            <TimelineRuler minYear={minYear} maxYear={maxYear} zoom={zoom} totalYears={totalYears} />
+          </div>
+
+          <div className="absolute left-0 w-full" style={{ top: `${timelineRulerY}px`, height: `${bottomContentHeight}px`}}>
             {events.map(event => 
               <EventItemComponent
                 key={event.id}
